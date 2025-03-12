@@ -45,33 +45,33 @@ public class Tankgame extends AnimListener implements GLEventListener, KeyListen
     int highScore=0;
     boolean isStarted = false;
     boolean isPaused = true;
-    int health = 7; // عدد القلوب المتبقية
-    int x2 = (maxWidth + 30) / 2, y2 = 0; // موقع الدبابة الثانية
-    int score = 0;  // متغير لتخزين النتيجة
+    int health = 7; 
+    int x2 = (maxWidth + 30) / 2, y2 = 0; 
+    int score = 0;  
     int score1 = 0;
-    ArrayList<Bullet> bullets = new ArrayList<>();// لتخزين الطلقات
-    List<Bullet> missiles = new ArrayList<>(); // قائمة الصواريخ
+    ArrayList<Bullet> bullets = new ArrayList<>();
+    List<Bullet> missiles = new ArrayList<>(); 
     int missileTimer = 0;
-    ArrayList<Explosion> explosions = new ArrayList<>(); // لتخزين الانفجارات
+    ArrayList<Explosion> explosions = new ArrayList<>(); 
     private GLU glu;
-    private boolean[] selected = new boolean[4]; // 1 Player, 2 Players, Target Practice, Return to Title
+    private boolean[] selected = new boolean[4]; 
     private boolean[] selected2 = new boolean[3];
     private TextRenderer textRenderer;
     private int width = 800;
     private int height = 600;
-    private String currentScreen = "menu"; // Track the current screen
+    private String currentScreen = "menu"; 
     private String currentscreen2 = "game";
     private SoundPlayer soundPlayer;
-    String userName = "Guest1"; // تعيين اسم افتراضي إذا لم يتم إدخال اسم
-    String userName1 = "Guest2"; // تعيين اسم افتراضي إذا لم يتم إدخال اسم
+    String userName = "Guest1"; 
+    String userName1 = "Guest2"; 
     float constantSpeed = 3;
     private long startTime = 0;
-    private long gameDuration = 60000; // 60 ثانية
+    private long gameDuration = 60000; 
     private boolean gameOver = false;
-    private float translateX1 = 0.0f; // موضع الصورة الأولى
-    private float translateX2 = 1.0f; // موضع الصورة الثانية (تبدأ بجانب الصورة الأولى مباشرة)
-    private float translationSpeed = 0.006f; // سرعة الحركة
-    private int switchScoreThreshold = 50; // النقاط التي تبدأ عندها الحركة
+    private float translateX1 = 0.0f; 
+    private float translateX2 = 1.0f;
+    private float translationSpeed = 0.006f;
+    private int switchScoreThreshold = 50;
 
 
 
@@ -86,41 +86,40 @@ public class Tankgame extends AnimListener implements GLEventListener, KeyListen
         int keyCode = event.getKeyCode();
         keyBits.set(keyCode);
 
-        // تحقق من المدخلات بناءً على المفاتيح
         if (currentScreen.equals("menu")) {
-            // في الواجهة الرئيسية
+            
             if (keyCode == KeyEvent.VK_1) {
-                selectMenuOption(0); // اختر "1 Player"
+                selectMenuOption(0); 
             } else if (keyCode == KeyEvent.VK_2) {
-                selectMenuOption(1); // اختر "2 Players"
+                selectMenuOption(1);
             } else if (keyCode == KeyEvent.VK_3) {
-                selectMenuOption(2); // اختر "Target Practice"
+                selectMenuOption(2); 
             } else if (keyCode == KeyEvent.VK_4) {
-                selectMenuOption(3); // اختر "Return to Title"
+                selectMenuOption(3); 
             } else if (keyCode == KeyEvent.VK_ESCAPE) {
-                System.exit(0); // الخروج من اللعبة فقط إذا كنت في القائمة الرئيسية
+                System.exit(0); 
             }
         } else if (currentScreen.equals("game")) {
-            // في واجهة الصعوبة
+           
             if (keyCode == KeyEvent.VK_E) {
-                selectMenuOption2(0); // اختر "Easy"
+                selectMenuOption2(0); 
             } else if (keyCode == KeyEvent.VK_M) {
-                selectMenuOption2(1); // اختر "Medium"
+                selectMenuOption2(1); 
             } else if (keyCode == KeyEvent.VK_H) {
-                selectMenuOption2(2); // اختر "Hard"
+                selectMenuOption2(2); 
             } else if (keyCode == KeyEvent.VK_ESCAPE) {
 
-                currentScreen = "game"; // العودة إلى الواجهة الرئيسية فقط إذا كنت في واجهة الصعوبة
+                currentScreen = "game"; 
             }
         } else if (currentScreen.equals("game2")) {
             if (keyCode == KeyEvent.VK_E) {
-                selectMenuOption2(3); // اختر "Easy"
+                selectMenuOption2(3); 
             } else if (keyCode == KeyEvent.VK_A) {
-                selectMenuOption2(4); // اختر "Medium"
+                selectMenuOption2(4); 
             } else if (keyCode == KeyEvent.VK_Q) {
 
 
-                currentScreen = "menu"; // العودة إلى الواجهة الرئيسية فقط إذا كنت في واجهة الصعوبة
+                currentScreen = "menu"; 
             }
         }
     }
@@ -144,9 +143,9 @@ public class Tankgame extends AnimListener implements GLEventListener, KeyListen
     public void init(GLAutoDrawable gld) {
 
         GL gl = gld.getGL();
-        gl.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);    //This Will Clear The Background Color To Black
+        gl.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);   
 
-        gl.glEnable(GL.GL_TEXTURE_2D);  // Enable Texture Mapping
+        gl.glEnable(GL.GL_TEXTURE_2D);  
         gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
         gl.glGenTextures(textureNames.length, textures, 0);
 
@@ -171,16 +170,16 @@ public class Tankgame extends AnimListener implements GLEventListener, KeyListen
         }
         try {
             File file = new File("highscore.txt");
-            if (file.exists()) { // إذا كان الملف موجودًا
+            if (file.exists()) { 
                 Scanner scanner = new Scanner(file);
-                if (scanner.hasNextInt()) { // إذا كان يحتوي على رقم
+                if (scanner.hasNextInt()) { 
                     highScore = scanner.nextInt();
                 } else {
-                    highScore = 0; // إذا كان الملف فارغًا
+                    highScore = 0; 
                 }
                 scanner.close();
             } else {
-                highScore = 0; // إذا لم يكن الملف موجودًا
+                highScore = 0; 
             }
             System.out.println("High Score loaded: " + highScore);
         } catch (Exception e) {
@@ -231,14 +230,14 @@ public class Tankgame extends AnimListener implements GLEventListener, KeyListen
                 renderText(userName, -0.8f, 0.8f, Color.WHITE);
                 renderText("Score:"+String.valueOf(score), 0.8f, 0.8f, Color.WHITE);
 
-                if (score==200) {// إذا انتهى الوقت
-                    gameOver = true; // قم بإنهاء اللعبة
+                if (score==200) {
+                    gameOver = true; 
                 }
                 if (gameOver) {
                     soundPlayer.playSound("1 - Track 1.mp3");
                     DrawSprite2(gl, maxWidth / 2 - 5, maxHeight / 2 - 5, textureNames.length - 4, 10);
                     renderText("Your Score:"+String.valueOf(score), 0.0f, 0.8f, Color.GREEN);
-                    return; // إيقاف اللعبة
+                    return; 
                 }
                 if (health <= 0) {
                     DrawSprite2(gl, maxWidth / 2 - 5, maxHeight / 2 - 5, textureNames.length - 6, 10);
@@ -249,10 +248,10 @@ public class Tankgame extends AnimListener implements GLEventListener, KeyListen
                     if (score > highScore) {
                         highScore = score;
                         if (score > highScore) {
-                            highScore = score; // تحديث الـ High Score
+                            highScore = score; 
                             try {
                                 FileWriter writer = new FileWriter("highscore.txt");
-                                writer.write(String.valueOf(highScore)); // الكتابة في الملف
+                                writer.write(String.valueOf(highScore)); 
                                 writer.close();
                                 System.out.println("High Score updated: " + highScore);
                             } catch (IOException e) {
@@ -273,14 +272,14 @@ public class Tankgame extends AnimListener implements GLEventListener, KeyListen
                 y1--;
                 handleKeyPress();
 
-                // رسم القلوب
-                for (int i = 0; i < health; i++) { // يتم رسم عدد القلوب بناءً على قيمة الصحة
-                    DrawSprite2(gl, 1 + i * 4, maxHeight - 10, 16, 0.4f); // رسم قلب ممتلئ فقط
+               
+                for (int i = 0; i < health; i++) {
+                    DrawSprite2(gl, 1 + i * 4, maxHeight - 10, 16, 0.4f); 
                 }
 
-                // تحريك الطائرات
+              
                 for (int i = 0; i < planeCount; i++) {
-                    planeX[i] -= (constantSpeed-2.5); // استخدام السرعة الثابتة
+                    planeX[i] -= (constantSpeed-2.5); 
                     if (planeX[i] < -50) {
                         planeX[i] = maxWidth;
                         planeY[i] = (int) (Math.random() * (maxHeight) + (maxHeight / 2));
@@ -290,45 +289,45 @@ public class Tankgame extends AnimListener implements GLEventListener, KeyListen
                     }
                     DrawSprite2(gl, (int) planeX[i], (int) planeY[i], textureNames.length - 9, 4);
                 }
-                // إطلاق الصواريخ من الطائرات
+              
                 missileTimer++;
-                if (missileTimer >= 100) { // إطلاق صاروخ كل 100 إطار
+                if (missileTimer >= 100) { 
                     for (int i = 0; i < planeCount; i++) {
-                        missiles.add(new Bullet((int) planeX[i], (int) planeY[i])); // إضافة صاروخ جديد
+                        missiles.add(new Bullet((int) planeX[i], (int) planeY[i])); 
                     }
-                    missileTimer = 0; // إعادة تعيين العداد
+                    missileTimer = 0; 
                 }
-                // تحريك الصواريخ
+              
                 for (int i = 0; i < missiles.size(); i++) {
                     Bullet missile = missiles.get(i);
-                    missile.y -= (constantSpeed-1); // الصاروخ يتحرك لأسفل
-                    DrawSprite2(gl, missile.x, missile.y, textureNames.length - 11, 0.5f); // رسم الصاروخ
-                    // التحقق من التصادم مع اللاعب
+                    missile.y -= (constantSpeed-1); 
+                    DrawSprite2(gl, missile.x, missile.y, textureNames.length - 11, 0.5f); 
+                   
                     double dist = sqrdDistance(missile.x, missile.y, x, y);
                     if (dist <= 50) {
                         System.out.println("Hit Player!");
                         soundPlayer.playSoundForDuration("explosion-42132.mp3", 1);
                         missiles.remove(i);
-                        health--; // تقليل الصحة عند الإصابة
+                        health--; 
                         if (health <= 0) {
                             return;
                         }
                         break;
                     }
-                    // إزالة الصاروخ إذا خرج من الشاشة
+                   
                     if (missile.y < 0) {
                         missiles.remove(i);
                         break;
                     }
                 }
-                // تحريك البرشوت
+             
                 for (int i = 0; i < parachuteCount; i++) {
-                    parachuteY[i] -= (constantSpeed - 2.5); // استخدام السرعة الثابتة
+                    parachuteY[i] -= (constantSpeed - 2.5);
                     if (parachuteY[i] <= 0) {
                         parachuteX[i] = (int) (Math.random() * maxWidth);
                         parachuteY[i] = maxHeight;
                         soundPlayer.playSoundForDuration("explosion-42132.mp3", 1);
-                        health--; // تقليل الصحة عند وصول البرشوت للأرض
+                        health--; 
                         if (health <= 0) {
                             return;
                         }
@@ -336,14 +335,14 @@ public class Tankgame extends AnimListener implements GLEventListener, KeyListen
                     DrawSprite2(gl, (int) parachuteX[i], (int) parachuteY[i], 12, 1);
                 }
 
-                // رسم باقي العناصر والطلقات
+               
                 for (int i = 0; i < bullets.size(); i++) {
                     Bullet bullet = bullets.get(i);
                     bullet.y += ninjaStarSpeed;
 
                     DrawSprite2(gl, bullet.x, bullet.y, 11, 0.5f);
 
-                    // التحقق من الاصطدام بالجنود
+                   
                     for (int j = 0; j < parachuteCount; j++) {
                         double dist = sqrdDistance(bullet.x, bullet.y, (int) parachuteX[j], (int) parachuteY[j]);
                         if (dist <= 50) {
@@ -358,7 +357,7 @@ public class Tankgame extends AnimListener implements GLEventListener, KeyListen
                         }
                     }
 
-                    // التحقق من الاصطدام بالطائرات
+                   
                     for (int j = 0; j < planeCount; j++) {
                         double dist = sqrdDistance(bullet.x, bullet.y, (int) planeX[j], (int) planeY[j]);
                         if (dist <= 50) {
@@ -381,7 +380,7 @@ public class Tankgame extends AnimListener implements GLEventListener, KeyListen
                 animationIndex = animationIndex % 4;
                 DrawSprite2(gl, x, y, animationIndex, 1);
 
-                // رسم الانفجارات
+               
                 for (int i = 0; i < explosions.size(); i++) {
                     Explosion explosion = explosions.get(i);
                     explosion.timeLeft--;
@@ -395,15 +394,15 @@ public class Tankgame extends AnimListener implements GLEventListener, KeyListen
                 drawBackground2(gl,textureNames.length-4,textureNames.length-4);
                 renderText(userName, -0.8f, 0.8f, Color.WHITE);
                 renderText("Score:"+String.valueOf(score), 0.8f, 0.8f, Color.WHITE);
-                if (score==400) {// إذا انتهى الوقت
-                    gameOver = true; // قم بإنهاء اللعبة
+                if (score==400) {
+                    gameOver = true; 
                 }
                 if (gameOver) {
                     soundPlayer.playSound("1 - Track 1.mp3");
                     soundPlayer.playSoundForDuration("explosion-42132.mp3", 1);
                     DrawSprite2(gl, maxWidth / 2 - 5, maxHeight / 2 - 5, textureNames.length - 4, 10);
                     renderText("Your Score:"+String.valueOf(score), 0.0f, 0.8f, Color.GREEN);
-                    return; // إيقاف اللعبة
+                    return; 
                 }
                 if (health <= 0) {
                     DrawSprite2(gl, maxWidth / 2 - 5, maxHeight / 2 - 5, textureNames.length - 6, 10);
@@ -414,10 +413,10 @@ public class Tankgame extends AnimListener implements GLEventListener, KeyListen
                     if (score > highScore) {
                         highScore = score;
                         if (score > highScore) {
-                            highScore = score; // تحديث الـ High Score
+                            highScore = score; 
                             try {
                                 FileWriter writer = new FileWriter("highscore.txt");
-                                writer.write(String.valueOf(highScore)); // الكتابة في الملف
+                                writer.write(String.valueOf(highScore)); 
                                 writer.close();
                                 System.out.println("High Score updated: " + highScore);
                             } catch (IOException e) {
@@ -436,13 +435,13 @@ public class Tankgame extends AnimListener implements GLEventListener, KeyListen
                 y1--;
                 handleKeyPress();
 
-                // رسم القلوب
-                for (int i = 0; i < health; i++) { // يتم رسم عدد القلوب بناءً على قيمة الصحة
-                    DrawSprite2(gl, 1 + i * 4, maxHeight - 10, 16, 0.4f); // رسم قلب ممتلئ فقط
+                
+                for (int i = 0; i < health; i++) { 
+                    DrawSprite2(gl, 1 + i * 4, maxHeight - 10, 16, 0.4f);
                 }
-                // تحريك الطائرات
+              
                 for (int i = 0; i < planeCount; i++) {
-                    planeX[i] -= (constantSpeed-2); // استخدام السرعة الثابتة
+                    planeX[i] -= (constantSpeed-2); 
                     if (planeX[i] < -50) {
                         planeX[i] = maxWidth;
                         planeY[i] = (int) (Math.random() * (maxHeight) + (maxHeight / 2));
@@ -452,57 +451,57 @@ public class Tankgame extends AnimListener implements GLEventListener, KeyListen
                     }
                     DrawSprite2(gl, (int) planeX[i], (int) planeY[i], textureNames.length - 9, 4);
                 }
-                // إطلاق الصواريخ من الطائرات
+               
                 missileTimer++;
-                if (missileTimer >= 100) { // إطلاق صاروخ كل 100 إطار
+                if (missileTimer >= 100) {
                     for (int i = 0; i < planeCount; i++) {
-                        missiles.add(new Bullet((int) planeX[i], (int) planeY[i])); // إضافة صاروخ جديد
+                        missiles.add(new Bullet((int) planeX[i], (int) planeY[i])); 
                     }
-                    missileTimer = 0; // إعادة تعيين العداد
+                    missileTimer = 0;
                 }
-                // تحريك الصواريخ
+               
                 for (int i = 0; i < missiles.size(); i++) {
                     Bullet missile = missiles.get(i);
-                    missile.y -= (constantSpeed-1); // الصاروخ يتحرك لأسفل
-                    DrawSprite2(gl, missile.x, missile.y, textureNames.length - 11, 0.5f); // رسم الصاروخ
-                    // التحقق من التصادم مع اللاعب
+                    missile.y -= (constantSpeed-1); 
+                    DrawSprite2(gl, missile.x, missile.y, textureNames.length - 11, 0.5f); 
+                   
                     double dist = sqrdDistance(missile.x, missile.y, x, y);
                     if (dist <= 50) {
                         System.out.println("Hit Player!");
                         soundPlayer.playSoundForDuration("explosion-42132.mp3", 1);
                         missiles.remove(i);
-                        health--; // تقليل الصحة عند الإصابة
+                        health--; 
                         if (health <= 0) {
                             return;
                         }
                         break;
                     }
-                    // إزالة الصاروخ إذا خرج من الشاشة
+                  
                     if (missile.y < 0) {
                         missiles.remove(i);
                         break;
                     }
                 }
-                // تحريك البرميل
+              
                 for (int i = 0; i < parachuteCount; i++) {
-                    parachuteY[i] -= (constantSpeed - 2); // استخدام السرعة الثابتة
+                    parachuteY[i] -= (constantSpeed - 2); 
                     if (parachuteY[i] <= 0) {
                         parachuteX[i] = (int) (Math.random() * maxWidth);
                         parachuteY[i] = maxHeight;
                         soundPlayer.playSoundForDuration("explosion-42132.mp3", 1);
-                        health--; // تقليل الصحة عند وصول البرشوت للأرض
+                        health--; 
                         if (health <= 0) {
                             return;
                         }
                     }
                     DrawSprite2(gl, (int) parachuteX[i], (int) parachuteY[i], 12, 1);
                 }
-                // رسم باقي العناصر والطلقات
+                
                 for (int i = 0; i < bullets.size(); i++) {
                     Bullet bullet = bullets.get(i);
                     bullet.y += ninjaStarSpeed;
                     DrawSprite2(gl, bullet.x, bullet.y, 11, 0.5f);
-                    // التحقق من الاصطدام بالجنود
+                  
                     for (int j = 0; j < parachuteCount; j++) {
                         double dist = sqrdDistance(bullet.x, bullet.y, (int) parachuteX[j], (int) parachuteY[j]);
                         if (dist <= 50) {
@@ -516,7 +515,7 @@ public class Tankgame extends AnimListener implements GLEventListener, KeyListen
                             break;
                         }
                     }
-                    // التحقق من الاصطدام بالطائرات
+                   
                     for (int j = 0; j < planeCount; j++) {
                         double dist = sqrdDistance(bullet.x, bullet.y, (int) planeX[j], (int) planeY[j]);
                         if (dist <= 50) {
@@ -538,7 +537,7 @@ public class Tankgame extends AnimListener implements GLEventListener, KeyListen
                 }
                 animationIndex = animationIndex % 4;
                 DrawSprite2(gl, x, y, animationIndex, 1);
-                // رسم الانفجارات
+              
                 for (int i = 0; i < explosions.size(); i++) {
                     Explosion explosion = explosions.get(i);
                     explosion.timeLeft--;
@@ -555,20 +554,20 @@ public class Tankgame extends AnimListener implements GLEventListener, KeyListen
                 renderText("Score:"+String.valueOf(score), 0.8f, 0.8f, Color.WHITE);
                 long currentTime = System.currentTimeMillis();
                 if (startTime == 0) {
-                    startTime = currentTime; // بداية اللعبة
+                    startTime = currentTime;
                 }
-                long elapsedTime = currentTime - startTime; // الوقت المنقضي
-                long remainingTime = gameDuration - elapsedTime; // الوقت المتبقي
-                if (remainingTime <= 0) {// إذا انتهى الوقت
-                    gameOver = true; // قم بإنهاء اللعبة
+                long elapsedTime = currentTime - startTime; 
+                long remainingTime = gameDuration - elapsedTime;
+                if (remainingTime <= 0) {
+                    gameOver = true;
                 }
                 if (gameOver) {
                     soundPlayer.playSound("1 - Track 1.mp3");
                     DrawSprite2(gl, maxWidth / 2 - 5, maxHeight / 2 - 5, textureNames.length - 4, 10);
                     renderText("Your Score:"+String.valueOf(score), 0.0f, 0.8f, Color.GREEN);
-                    return; // إيقاف اللعبة
+                    return; 
                 }
-                renderText("Time Left: " + remainingTime / 1000 + "s", 0.0f, 0.8f, Color.WHITE); // عرض الوقت المتبقي
+                renderText("Time Left: " + remainingTime / 1000 + "s", 0.0f, 0.8f, Color.WHITE); 
                 if (health <= 0) {
                     DrawSprite2(gl, maxWidth / 2 - 5, maxHeight / 2 - 5, textureNames.length - 6, 10);
                     gl.glPushMatrix();
@@ -578,10 +577,10 @@ public class Tankgame extends AnimListener implements GLEventListener, KeyListen
                     if (score > highScore) {
                         highScore = score;
                         if (score > highScore) {
-                            highScore = score; // تحديث الـ High Score
+                            highScore = score; 
                             try {
                                 FileWriter writer = new FileWriter("highscore.txt");
-                                writer.write(String.valueOf(highScore)); // الكتابة في الملف
+                                writer.write(String.valueOf(highScore)); 
                                 writer.close();
                                 System.out.println("High Score updated: " + highScore);
                             } catch (IOException e) {
@@ -599,13 +598,13 @@ public class Tankgame extends AnimListener implements GLEventListener, KeyListen
                 }
                 y1--;
                 handleKeyPress();
-                // رسم القلوب
-                for (int i = 0; i < health; i++) { // يتم رسم عدد القلوب بناءً على قيمة الصحة
-                    DrawSprite2(gl, 1 + i * 4, maxHeight - 10, 16, 0.4f); // رسم قلب ممتلئ فقط
+              
+                for (int i = 0; i < health; i++) { 
+                    DrawSprite2(gl, 1 + i * 4, maxHeight - 10, 16, 0.4f); 
                 }
-                // تحريك الطائرات
+              
                 for (int i = 0; i < planeCount; i++) {
-                    planeX[i] -= (constantSpeed-2.5); // استخدام السرعة الثابتة
+                    planeX[i] -= (constantSpeed-2.5); 
                     if (planeX[i] < -50) {
                         planeX[i] = maxWidth;
                         planeY[i] = (int) (Math.random() * (maxHeight) + (maxHeight / 2));
@@ -615,59 +614,59 @@ public class Tankgame extends AnimListener implements GLEventListener, KeyListen
                     }
                     DrawSprite2(gl, (int) planeX[i], (int) planeY[i], textureNames.length - 9, 4);
                 }
-                // إطلاق الصواريخ من الطائرات
+              
                 missileTimer++;
-                if (missileTimer >= 100) { // إطلاق صاروخ كل 100 إطار
+                if (missileTimer >= 100) { 
                     for (int i = 0; i < planeCount; i++) {
-                        missiles.add(new Bullet((int) planeX[i], (int) planeY[i])); // إضافة صاروخ جديد
+                        missiles.add(new Bullet((int) planeX[i], (int) planeY[i]));
                     }
-                    missileTimer = 0; // إعادة تعيين العداد
+                    missileTimer = 0; 
                 }
-                // تحريك الصواريخ
+              
                 for (int i = 0; i < missiles.size(); i++) {
                     Bullet missile = missiles.get(i);
-                    missile.y -= (constantSpeed-1.5); // الصاروخ يتحرك لأسفل
+                    missile.y -= (constantSpeed-1.5); 
 
-                    DrawSprite2(gl, missile.x, missile.y, textureNames.length - 11, 0.5f); // رسم الصاروخ
+                    DrawSprite2(gl, missile.x, missile.y, textureNames.length - 11, 0.5f); 
 
-                    // التحقق من التصادم مع اللاعب
+                  
                     double dist = sqrdDistance(missile.x, missile.y, x, y);
                     if (dist <= 50) {
                         System.out.println("Hit Player!");
                         soundPlayer.playSoundForDuration("explosion-42132.mp3", 1);
                         missiles.remove(i);
-                        health--; // تقليل الصحة عند الإصابة
+                        health--; 
                         if (health <= 0) {
                             return;
                         }
                         break;
                     }
-                    // إزالة الصاروخ إذا خرج من الشاشة
+                  
                     if (missile.y < 0) {
                         missiles.remove(i);
                         break;
                     }
                 }
-                // تحريك البرميل
+              
                 for (int i = 0; i < parachuteCount; i++) {
-                    parachuteY[i] -= (constantSpeed - 1.5); // استخدام السرعة الثابتة
+                    parachuteY[i] -= (constantSpeed - 1.5); 
                     if (parachuteY[i] <= 0) {
                         parachuteX[i] = (int) (Math.random() * maxWidth);
                         parachuteY[i] = maxHeight;
                         soundPlayer.playSoundForDuration("explosion-42132.mp3", 1);
-                        health--; // تقليل الصحة عند وصول البرشوت للأرض
+                        health--; 
                         if (health <= 0) {
                             return;
                         }
                     }
                     DrawSprite2(gl, (int) parachuteX[i], (int) parachuteY[i], 12, 1);
                 }
-                // رسم باقي العناصر والطلقات
+              
                 for (int i = 0; i < bullets.size(); i++) {
                     Bullet bullet = bullets.get(i);
                     bullet.y += ninjaStarSpeed;
                     DrawSprite2(gl, bullet.x, bullet.y, 11, 0.5f);
-                    // التحقق من الاصطدام بالجنود
+                  
                     for (int j = 0; j < parachuteCount; j++) {
                         double dist = sqrdDistance(bullet.x, bullet.y, (int) parachuteX[j], (int) parachuteY[j]);
                         if (dist <= 50) {
@@ -681,7 +680,7 @@ public class Tankgame extends AnimListener implements GLEventListener, KeyListen
                             break;
                         }
                     }
-                    // التحقق من الاصطدام بالطائرات
+                   
                     for (int j = 0; j < planeCount; j++) {
                         double dist = sqrdDistance(bullet.x, bullet.y, (int) planeX[j], (int) planeY[j]);
                         if (dist <= 50) {
@@ -749,15 +748,15 @@ public class Tankgame extends AnimListener implements GLEventListener, KeyListen
                 renderText("Score:" + String.valueOf(score1), 0.8f, 0.6f, Color.WHITE);
                 long currentTime = System.currentTimeMillis();
                 if (startTime == 0) {
-                    startTime = currentTime; // بداية اللعبة
+                    startTime = currentTime;
                 }
-                long elapsedTime = currentTime - startTime; // الوقت المنقضي
-                long remainingTime = gameDuration - elapsedTime; // الوقت المتبقي
-                if (remainingTime <= 0) {// إذا انتهى الوقت
-                    gameOver = true;// قم بإنهاء اللعبة
+                long elapsedTime = currentTime - startTime; 
+                long remainingTime = gameDuration - elapsedTime; 
+                if (remainingTime <= 0) {
+                    gameOver = true;
                     handleKeyPress2();
                 }
-                if (gameOver) {// إيقاف اللعبة
+                if (gameOver) {
                     renderText("Game Over!", 0.0f, 0.0f, Color.RED);
                     soundPlayer.playSound("2 - Track 2.mp3");
 
@@ -774,7 +773,7 @@ public class Tankgame extends AnimListener implements GLEventListener, KeyListen
                     renderText("Player 2 Score: " + score1, 0.4f, 0.4f, Color.WHITE);
                     return; // إيقاف اللعبة
                 }
-                renderText("Time Left: " + remainingTime / 1000 + "s", 0.0f, 0.8f, Color.WHITE);// عرض الوقت المتبقي
+                renderText("Time Left: " + remainingTime / 1000 + "s", 0.0f, 0.8f, Color.WHITE);
                if (health <= 0) {
                    DrawSprite2(gl, maxWidth / 2 - 5, maxHeight / 2 - 5, textureNames.length - 6, 10);
                     return;
@@ -786,10 +785,9 @@ public class Tankgame extends AnimListener implements GLEventListener, KeyListen
                 }
                 y1--;
                 handleKeyPress();
-                // تحريك الطائرات
-                // تحريك الطائرات
+              
                 for (int i = 0; i < planeCount; i++) {
-                    planeX[i] -= (constantSpeed-2); // استخدام السرعة الثابتة
+                    planeX[i] -= (constantSpeed-2); 
                     if (planeX[i] < -50) {
                         planeX[i] = maxWidth;
                         planeY[i] = (int) (Math.random() * (maxHeight) + (maxHeight / 2));
@@ -799,57 +797,57 @@ public class Tankgame extends AnimListener implements GLEventListener, KeyListen
                     }
                     DrawSprite2(gl, (int) planeX[i], (int) planeY[i], textureNames.length - 9, 4);
                 }
-                // إطلاق الصواريخ من الطائرات
+              
                 missileTimer++;
-                if (missileTimer >= 100) { // إطلاق صاروخ كل 100 إطار
+                if (missileTimer >= 100) { 
                     for (int i = 0; i < planeCount; i++) {
-                        missiles.add(new Bullet((int) planeX[i], (int) planeY[i])); // إضافة صاروخ جديد
+                        missiles.add(new Bullet((int) planeX[i], (int) planeY[i])); 
                     }
-                    missileTimer = 0; // إعادة تعيين العداد
+                    missileTimer = 0;
                 }
-                // تحريك الصواريخ
+               
                 for (int i = 0; i < missiles.size(); i++) {
                     Bullet missile = missiles.get(i);
-                    missile.y -= (constantSpeed-1); // الصاروخ يتحرك لأسفل
-                    DrawSprite2(gl, missile.x, missile.y, textureNames.length - 11, 0.5f); // رسم الصاروخ
-                    // التحقق من التصادم مع اللاعب
+                    missile.y -= (constantSpeed-1); 
+                    DrawSprite2(gl, missile.x, missile.y, textureNames.length - 11, 0.5f); 
+                   
                     double dist = sqrdDistance(missile.x, missile.y, x, y);
                     if (dist <= 50) {
                         System.out.println("Hit Player!");
                         soundPlayer.playSoundForDuration("explosion-42132.mp3", 1);
                         missiles.remove(i);
-                      //  health--; // تقليل الصحة عند الإصابة
+                     
                         if (health <= 0) {
                             return;
                         }
                         break;
                     }
-                    // إزالة الصاروخ إذا خرج من الشاشة
+                  
                     if (missile.y < 0) {
                         missiles.remove(i);
                         break;
                     }
                 }
-                // تحريك البرميل
+              
                 for (int i = 0; i < parachuteCount; i++) {
-                    parachuteY[i] -= (constantSpeed - 2); // استخدام السرعة الثابتة
+                    parachuteY[i] -= (constantSpeed - 2); 
                     if (parachuteY[i] <= 0) {
                         parachuteX[i] = (int) (Math.random() * maxWidth);
                         parachuteY[i] = maxHeight;
                         soundPlayer.playSoundForDuration("explosion-42132.mp3", 1);
-                       // health--; // تقليل الصحة عند وصول البرشوت للأرض
+                      
                         if (health <= 0) {
                             return;
                         }
                     }
                     DrawSprite2(gl, (int) parachuteX[i], (int) parachuteY[i], 12, 1);
                 }
-                // رسم باقي العناصر والطلقات
+               
                 for (int i = 0; i < bullets.size(); i++) {
                     Bullet bullet = bullets.get(i);
                     bullet.y += ninjaStarSpeed;
                     DrawSprite2(gl, bullet.x, bullet.y, 11, 0.5f);
-                    // التحقق من الاصطدام بالجنود
+                   
                     for (int j = 0; j < parachuteCount; j++) {
                         double dist = sqrdDistance(bullet.x, bullet.y, (int) parachuteX[j], (int) parachuteY[j]);
                         if (dist <= 50) {
@@ -869,7 +867,7 @@ public class Tankgame extends AnimListener implements GLEventListener, KeyListen
                             break;
                         }
                     }
-                    // التحقق من الاصطدام بالطائرات
+                    
                     for (int j = 0; j < planeCount; j++) {
                         double dist = sqrdDistance(bullet.x, bullet.y, (int) planeX[j], (int) planeY[j]);
                         if (dist <= 50) {
@@ -919,15 +917,15 @@ public class Tankgame extends AnimListener implements GLEventListener, KeyListen
                 renderText("Score:" + String.valueOf(score1), 0.8f, 0.6f, Color.WHITE);
                 long currentTime = System.currentTimeMillis();
                 if (startTime == 0) {
-                    startTime = currentTime; // بداية اللعبة
+                    startTime = currentTime;
                 }
-                long elapsedTime = currentTime - startTime; // الوقت المنقضي
-                long remainingTime = gameDuration - elapsedTime; // الوقت المتبقي
-                if (remainingTime <= 0) {// إذا انتهى الوقت
-                    gameOver = true;// قم بإنهاء اللعبة
+                long elapsedTime = currentTime - startTime; 
+                long remainingTime = gameDuration - elapsedTime; 
+                if (remainingTime <= 0) {
+                    gameOver = true;
                     handleKeyPress2();
                 }
-                if (gameOver) {// إيقاف اللعبة
+                if (gameOver) {
                     renderText("Game Over!", 0.0f, 0.0f, Color.RED);
 
                     if (score > score1) {
@@ -941,7 +939,7 @@ public class Tankgame extends AnimListener implements GLEventListener, KeyListen
                     renderText("Player 2 Score: " + score1, 0.4f, 0.4f, Color.WHITE);
                     return; // إيقاف اللعبة
                 }
-                renderText("Time Left: " + remainingTime / 1000 + "s", 0.0f, 0.8f, Color.WHITE);// عرض الوقت المتبقي
+                renderText("Time Left: " + remainingTime / 1000 + "s", 0.0f, 0.8f, Color.WHITE);
                 if (health <= 0) {
                     DrawSprite2(gl, maxWidth / 2 - 5, maxHeight / 2 - 5, textureNames.length - 6, 10);
                     return;
@@ -953,10 +951,9 @@ public class Tankgame extends AnimListener implements GLEventListener, KeyListen
                 }
                 y1--;
                 handleKeyPress();
-                // تحريك الطائرات
-                // تحريك الصواريخ
+               
                 for (int i = 0; i < planeCount; i++) {
-                    planeX[i] -= (constantSpeed-2); // استخدام السرعة الثابتة
+                    planeX[i] -= (constantSpeed-2);
                     if (planeX[i] < -50) {
                         planeX[i] = maxWidth;
                         planeY[i] = (int) (Math.random() * (maxHeight) + (maxHeight / 2));
@@ -966,54 +963,54 @@ public class Tankgame extends AnimListener implements GLEventListener, KeyListen
                     }
                     DrawSprite2(gl, (int) planeX[i], (int) planeY[i], textureNames.length - 9, 4);
                 }
-                // إطلاق الصواريخ من الطائرات
+              
                 missileTimer++;
-                if (missileTimer >= 100) { // إطلاق صاروخ كل 100 إطار
+                if (missileTimer >= 100) { 
                     for (int i = 0; i < planeCount; i++) {
-                        missiles.add(new Bullet((int) planeX[i], (int) planeY[i])); // إضافة صاروخ جديد
+                        missiles.add(new Bullet((int) planeX[i], (int) planeY[i])); 
                     }
-                    missileTimer = 0; // إعادة تعيين العداد
+                    missileTimer = 0;
                 }
                 for (int i = 0; i < missiles.size(); i++) {
                     Bullet missile = missiles.get(i);
-                    missile.y -= (constantSpeed-1); // الصاروخ يتحرك لأسفل
-                    DrawSprite2(gl, missile.x, missile.y, textureNames.length - 11, 0.5f); // رسم الصاروخ
-                    // التحقق من التصادم مع اللاعب
+                    missile.y -= (constantSpeed-1);
+                    DrawSprite2(gl, missile.x, missile.y, textureNames.length - 11, 0.5f);
+                  
                     double dist = sqrdDistance(missile.x, missile.y, x, y);
                     if (dist <= 50) {
                         System.out.println("Hit Player!");
                         missiles.remove(i);
-                        //  health--; // تقليل الصحة عند الإصابة
+                      
                         if (health <= 0) {
                             return;
                         }
                         break;
                     }
-                    // إزالة الصاروخ إذا خرج من الشاشة
+                   
                     if (missile.y < 0) {
                         missiles.remove(i);
                         break;
                     }
                 }
-                // تحريك البرميل
+                
                 for (int i = 0; i < parachuteCount; i++) {
-                    parachuteY[i] -= (constantSpeed - 2); // استخدام السرعة الثابتة
+                    parachuteY[i] -= (constantSpeed - 2); 
                     if (parachuteY[i] <= 0) {
                         parachuteX[i] = (int) (Math.random() * maxWidth);
                         parachuteY[i] = maxHeight;
-                        // health--; // تقليل الصحة عند وصول البرشوت للأرض
+                       
                         if (health <= 0) {
                             return;
                         }
                     }
                     DrawSprite2(gl, (int) parachuteX[i], (int) parachuteY[i], 12, 1);
                 }
-                // رسم باقي العناصر والطلقات
+               
                 for (int i = 0; i < bullets.size(); i++) {
                     Bullet bullet = bullets.get(i);
                     bullet.y += ninjaStarSpeed;
                     DrawSprite2(gl, bullet.x, bullet.y, 11, 0.5f);
-                    // التحقق من الاصطدام بالجنود
+                  
                     for (int j = 0; j < parachuteCount; j++) {
                         double dist = sqrdDistance(bullet.x, bullet.y, (int) parachuteX[j], (int) parachuteY[j]);
                         if (dist <= 50) {
@@ -1032,7 +1029,7 @@ public class Tankgame extends AnimListener implements GLEventListener, KeyListen
                             break;
                         }
                     }
-                    // التحقق من الاصطدام بالطائرات
+                    
                     for (int j = 0; j < planeCount; j++) {
                         double dist = sqrdDistance(bullet.x, bullet.y, (int) planeX[j], (int) planeY[j]);
                         if (dist <= 50) {
@@ -1110,12 +1107,12 @@ public class Tankgame extends AnimListener implements GLEventListener, KeyListen
         gl.glDisable(GL.GL_BLEND);
     }
     private void drawMenuOptions(GL gl) {
-        // إعداد المتغيرات العامة لرسم الأزرار
+        
         float buttonStartY = 0.4f;
         float buttonSpacing = 0.2f;
         float buttonWidth = 0.8f;
         float buttonHeight = 0.12f;
-        // رسم الأزرار
+      
         drawSolidButton(gl, -buttonWidth / 2, buttonStartY, buttonWidth, buttonHeight, "1 Player", selected[0]);
         drawSolidButton(gl, -buttonWidth / 2, buttonStartY - buttonSpacing, buttonWidth, buttonHeight, "2 Players", selected[1]);
         drawSolidButton(gl, -buttonWidth / 2, buttonStartY - 2 * buttonSpacing, buttonWidth, buttonHeight, "Help", selected[2]);
@@ -1123,32 +1120,32 @@ public class Tankgame extends AnimListener implements GLEventListener, KeyListen
         renderText("ESC to Exit", -0.7f, -0.9f, Color.WHITE);
     }
     private void drawMenuOptions2(GL gl) {
-        // إعداد المتغيرات العامة لرسم الأزرار
+        
         float buttonStartY = 0.4f;
         float buttonSpacing = 0.2f;
         float buttonWidth = 0.8f;
         float buttonHeight = 0.12f;
-        // رسم الأزرار
+      
         drawSolidButton(gl, -buttonWidth / 2, buttonStartY, buttonWidth, buttonHeight, "Easy", selected2[0]);
         drawSolidButton(gl, -buttonWidth / 2, buttonStartY - buttonSpacing, buttonWidth, buttonHeight, "Medium", selected2[1]);
         drawSolidButton(gl, -buttonWidth / 2, buttonStartY - 2 * buttonSpacing, buttonWidth, buttonHeight, "Hard", selected2[2]);
         renderText("ESC to Exit", -0.7f, -0.9f, Color.WHITE);
     }
     private void drawMenuOptions3(GL gl) {
-        // إعداد المتغيرات العامة لرسم الأزرار
+       
         float buttonStartY = 0.4f;
         float buttonSpacing = 0.2f;
         float buttonWidth = 0.8f;
         float buttonHeight = 0.12f;
-        // رسم الأزرار
+      
         drawSolidButton(gl, -buttonWidth / 2, buttonStartY, buttonWidth, buttonHeight, "1 V 1", selected2[0]);
         drawSolidButton(gl, -buttonWidth / 2, buttonStartY - buttonSpacing, buttonWidth, buttonHeight, "1 V Computer", selected2[1]);
 
         renderText("ESC to Exit", -0.7f, -0.9f, Color.WHITE);
     }
     private void drawSolidButton(GL gl, float x, float y, float width, float height, String text, boolean isSelected) {
-        // رسم الظل (خلف الزر)
-        gl.glColor4f(0.2f, 0.2f, 0.2f, 0.8f); // لون داكن للظل
+      
+        gl.glColor4f(0.2f, 0.2f, 0.2f, 0.8f); 
         gl.glBegin(GL.GL_QUADS);
         gl.glVertex2f(x - 0.01f, y + 0.01f);
         gl.glVertex2f(x + width + 0.01f, y + 0.01f);
@@ -1156,20 +1153,20 @@ public class Tankgame extends AnimListener implements GLEventListener, KeyListen
         gl.glVertex2f(x - 0.01f, y - height - 0.01f);
         gl.glEnd();
         if (isSelected) {
-            gl.glColor4f(1.0f, 0.0f, 0.0f, 1.0f); // زر محدد (أحمر بالكامل)
+            gl.glColor4f(1.0f, 0.0f, 0.0f, 1.0f); 
         } else {
-            gl.glColor4f(1.0f, 0.0f, 0.0f, 0.7f); // زر غير محدد (شفافية أقل)
+            gl.glColor4f(1.0f, 0.0f, 0.0f, 0.7f);
         }
-        // رسم الزر الأساسي
+        
         gl.glBegin(GL.GL_QUADS);
         gl.glVertex2f(x, y);
         gl.glVertex2f(x + width, y);
         gl.glVertex2f(x + width, y - height);
         gl.glVertex2f(x, y - height);
         gl.glEnd();
-        // رسم الإطار البارز حول الزر
-        gl.glColor4f(1.0f, 0.5f, 0.5f, 1.0f); // لون أفتح للإطار
-        gl.glLineWidth(2.0f); // سماكة الإطار
+      
+        gl.glColor4f(1.0f, 0.5f, 0.5f, 1.0f);
+        gl.glLineWidth(2.0f);
         gl.glBegin(GL.GL_LINE_LOOP);
         gl.glVertex2f(x, y);
         gl.glVertex2f(x + width, y);
@@ -1184,20 +1181,20 @@ public class Tankgame extends AnimListener implements GLEventListener, KeyListen
         public void playSound(String resourcePath) {
             try {
                 new JFXPanel();
-                // تحميل ملف الصوت
+               
                 URL soundURL = getClass().getResource(resourcePath);
                 if (soundURL == null) {
                     System.err.println("Sound file not found: " + resourcePath);
                     return;
                 }
-                // تشغيل الصوت إذا لم يكن قيد التشغيل
+                
                 if (mediaPlayer == null || !isSoundPlaying) {
                     Media soundTrack = new Media(soundURL.toURI().toString());
                     mediaPlayer = new MediaPlayer(soundTrack);
                     mediaPlayer.play();
                     isSoundPlaying = true;
 
-                    // إعادة تعيين الحالة عند انتهاء الصوت
+                   
                     mediaPlayer.setOnEndOfMedia(() -> {
                         isSoundPlaying = false;
                         System.out.println("Playback finished.");
@@ -1217,7 +1214,7 @@ public class Tankgame extends AnimListener implements GLEventListener, KeyListen
                 System.out.println("Sound stopped manually.");
             }
         }
-        // تشغيل الصوت لمدة معينة (بالثواني)
+      
         public void playSoundForDuration(String resourcePath, int durationInSeconds) {
             playSound(resourcePath);
             new java.util.Timer().schedule(new java.util.TimerTask() {
@@ -1225,7 +1222,7 @@ public class Tankgame extends AnimListener implements GLEventListener, KeyListen
                 public void run() {
                     stopSound();
                 }
-            }, durationInSeconds * 500); // تحويل الثواني إلى مللي ثانية
+            }, durationInSeconds * 500);
         }
     }
     private void resetGame() {
@@ -1239,26 +1236,26 @@ public class Tankgame extends AnimListener implements GLEventListener, KeyListen
             parachuteY[i] = maxHeight;    }
         bullets.clear();    missiles.clear();
         explosions.clear();
-        //     missileTimer = 0;
+      
         animationIndex = 0;
-        // 7. إيقاف أي صوت نشط    soundPlayer.stopSound();
+       
         System.out.println("Game has been reset.");
     }
     private void drawBackground2(GL gl, int texture1, int texture2) {
-        // عند الوصول إلى قيمة الـ score المطلوبة، تبدأ الحركة
+       
         if (score >= switchScoreThreshold) {
-            // تحريك الخلفية الأولى إلى اليسار
+           
             translateX1 -= translationSpeed;
-            // تحريك الخلفية الثانية إلى اليسار
+           
             translateX2 -= translationSpeed;
-            // إذا خرجت الصورة الأولى بالكامل من اليسار، أعد وضعها إلى اليمين
+         
             if (translateX1 <= -1.0f) {
-                translateX1 = translateX2 + 1.0f; // وضع الصورة الأولى بجانب الثانية
+                translateX1 = translateX2 + 1.0f; 
             }
 
-            // إذا خرجت الصورة الثانية بالكامل من اليسار، أعد وضعها إلى اليمين
+
             if (translateX2 <= -1.0f) {
-                translateX2 = translateX1 + 1.0f; // وضع الصورة الثانية بجانب الأولى
+                translateX2 = translateX1 + 1.0f; 
             }
         }
         gl.glEnable(GL.GL_BLEND);
@@ -1434,36 +1431,36 @@ public class Tankgame extends AnimListener implements GLEventListener, KeyListen
         float buttonWidth = 0.8f;
         float buttonHeight = 0.12f;
         if (currentScreen.equals("menu")) {
-            if (mouseX >= -buttonWidth / 2 && mouseX <= buttonWidth / 2) { // عرضياً يجب أن تكون داخل النصوص
+            if (mouseX >= -buttonWidth / 2 && mouseX <= buttonWidth / 2) { 
                 if (mouseY <= buttonStartY && mouseY >= buttonStartY - buttonHeight) {
-                    selectMenuOption(0); // اختر "1 Player"
+                    selectMenuOption(0);
                 } else if (mouseY <= buttonStartY - buttonSpacing && mouseY >= buttonStartY - buttonSpacing - buttonHeight) {
-                    selectMenuOption(1); // اختر "2 Players"
+                    selectMenuOption(1); 
                 } else if (mouseY <= buttonStartY - 2 * buttonSpacing && mouseY >= buttonStartY - 2 * buttonSpacing - buttonHeight) {
-                    selectMenuOption(2); // اختر "Help"
+                    selectMenuOption(2); 
                 } else if (mouseY <= buttonStartY - 3 * buttonSpacing && mouseY >= buttonStartY - 3 * buttonSpacing - buttonHeight) {
-                    selectMenuOption(3); // اختر "High Score"
+                    selectMenuOption(3); 
                 }
             }
         }
-        // تحقق من إذا ما كانت النقرة داخل أي من المناطق المحددة لواجهة الصعوبة
+       
         else if (currentScreen.equals("game")) {
-            if (mouseX >= -buttonWidth / 2 && mouseX <= buttonWidth / 2) { // عرضياً يجب أن تكون داخل النصوص
+            if (mouseX >= -buttonWidth / 2 && mouseX <= buttonWidth / 2) { 
                 if (mouseY <= buttonStartY && mouseY >= buttonStartY - buttonHeight) {
-                    selectMenuOption2(0); // اختر "Easy"
+                    selectMenuOption2(0); 
                 } else if (mouseY <= buttonStartY - buttonSpacing && mouseY >= buttonStartY - buttonSpacing - buttonHeight) {
-                    selectMenuOption2(1); // اختر "Medium"
+                    selectMenuOption2(1);
                 } else if (mouseY <= buttonStartY - 2 * buttonSpacing && mouseY >= buttonStartY - 2 * buttonSpacing - buttonHeight) {
-                    selectMenuOption2(2); // اختر "Hard"
+                    selectMenuOption2(2); 
                 }
             }
         }
         else if (currentScreen.equals("game2")) {
-            if (mouseX >= -buttonWidth / 2 && mouseX <= buttonWidth / 2) { // عرضياً يجب أن تكون داخل النصوص
+            if (mouseX >= -buttonWidth / 2 && mouseX <= buttonWidth / 2) { 
                 if (mouseY <= buttonStartY && mouseY >= buttonStartY - buttonHeight) {
-                    selectMenuOption2(3); // اختر "Easy"
+                    selectMenuOption2(3);
                 } else if (mouseY <= buttonStartY - buttonSpacing && mouseY >= buttonStartY - buttonSpacing - buttonHeight) {
-                    selectMenuOption2(4); // اختر "Medium"
+                    selectMenuOption2(4); 
                 }
                 }
             }
@@ -1501,14 +1498,14 @@ public class Tankgame extends AnimListener implements GLEventListener, KeyListen
             this.tankId = tankId;
         }
     }
-    // فئة لتمثيل الانفجارات
+   
     class Explosion {
         int x, y, timeLeft;
 
         Explosion(int startX, int startY) {
             x = startX;
             y = startY;
-            timeLeft = 10; // عدد الإطارات التي ستظل فيها الصورة ظاهرة
+            timeLeft = 10;
         }
     }
 }
