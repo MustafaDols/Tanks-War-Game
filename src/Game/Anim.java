@@ -19,7 +19,7 @@ public class Anim extends JFrame {
         glcanvas.addMouseListener(listener);
         glcanvas.addMouseMotionListener(listener);
         getContentPane().add(glcanvas, BorderLayout.CENTER);
-        animator = new FPSAnimator(60); // 60 إطار في الثانية
+        animator = new FPSAnimator(60); 
         animator.add(glcanvas);
         animator.start();
         setTitle("Tank Battle Game");
