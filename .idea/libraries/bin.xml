@@ -1,0 +1,21 @@
+<component name="libraryTable">
+  <library name="bin">
+    <CLASSES>
+      <root url="file://D:/CollegeCS/Level 3 (Term 1)/CS 304 Graphics/javafx-sdk-23.0.1/lib" />
+    </CLASSES>
+    <JAVADOC />
+    <NATIVE>
+      <root url="file://D:/CollegeCS/Level 3 (Term 1)/CS 304 Graphics/javafx-sdk-23.0.1/bin" />
+    </NATIVE>
+    <SOURCES>
+      <root url="file://D:/CollegeCS/Level 3 (Term 1)/CS 304 Graphics/javafx-sdk-23.0.1/javafx.base" />
+      <root url="file://D:/CollegeCS/Level 3 (Term 1)/CS 304 Graphics/javafx-sdk-23.0.1/javafx.controls" />
+      <root url="file://D:/CollegeCS/Level 3 (Term 1)/CS 304 Graphics/javafx-sdk-23.0.1/javafx.fxml" />
+      <root url="file://D:/CollegeCS/Level 3 (Term 1)/CS 304 Graphics/javafx-sdk-23.0.1/javafx.graphics" />
+      <root url="file://D:/CollegeCS/Level 3 (Term 1)/CS 304 Graphics/javafx-sdk-23.0.1/javafx.media" />
+      <root url="file://D:/CollegeCS/Level 3 (Term 1)/CS 304 Graphics/javafx-sdk-23.0.1/javafx.swing" />
+      <root url="file://D:/CollegeCS/Level 3 (Term 1)/CS 304 Graphics/javafx-sdk-23.0.1/javafx.web" />
+    </SOURCES>
+    <jarDirectory url="file://D:/CollegeCS/Level 3 (Term 1)/CS 304 Graphics/javafx-sdk-23.0.1/lib" recursive="false" />
+  </library>
+</component>
