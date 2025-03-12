@@ -13,15 +13,15 @@ public abstract class AnimListener implements GLEventListener, KeyListener {
             renderText("Score:"+String.valueOf(score1), 0.8f, 0.6f, Color.WHITE);
             long currentTime = System.currentTimeMillis();
             if (startTime == 0) {
-                startTime = currentTime; // بداية اللعبة
+                startTime = currentTime; 
             }
-            long elapsedTime = currentTime - startTime; // الوقت المنقضي
-            long remainingTime = gameDuration - elapsedTime; // الوقت المتبقي
-            if (remainingTime <= 0) {// إذا انتهى الوقت
-                gameOver = true;// قم بإنهاء اللعبة
+            long elapsedTime = currentTime - startTime; 
+            long remainingTime = gameDuration - elapsedTime;
+            if (remainingTime <= 0) {
+                gameOver = true;
                 handleKeyPress2();
             }
-            if (gameOver) {// إيقاف اللعبة
+            if (gameOver) {
                 renderText("Game Over!", 0.0f, 0.0f, Color.RED);
 
                 if (score > score1) {
@@ -33,9 +33,9 @@ public abstract class AnimListener implements GLEventListener, KeyListener {
                 }
                 renderText("Player 1 Score: " + score, -0.4f, 0.4f, Color.WHITE);
                 renderText("Player 2 Score: " + score1, 0.4f, 0.4f, Color.WHITE);
-                return; // إيقاف اللعبة
+                return; 
             }
-            renderText("Time Left: " + remainingTime / 1000 + "s", 0.0f, 0.8f, Color.WHITE);// عرض الوقت المتبقي
+            renderText("Time Left: " + remainingTime / 1000 + "s", 0.0f, 0.8f, Color.WHITE);
             if (health <= 0) {
                 DrawSprite2(gl, maxWidth / 2 - 5, maxHeight / 2 - 5, textureNames.length - 6, 10);
                 return;
@@ -47,9 +47,9 @@ public abstract class AnimListener implements GLEventListener, KeyListener {
             }
             y1--;
             handleKeyPress();
-            // تحريك الطائرات
+           
             for (int i = 0; i < planeCount; i++) {
-                planeX[i] -= (constantSpeed-1.5); // استخدام السرعة الثابتة
+                planeX[i] -= (constantSpeed-1.5); 
                 if (planeX[i] < -50) {
                     planeX[i] = maxWidth;
                     planeY[i] = (int) (Math.random() * (maxHeight) + (maxHeight / 2));
@@ -58,28 +58,27 @@ public abstract class AnimListener implements GLEventListener, KeyListener {
                     }
                 }
                 DrawSprite2(gl, (int) planeX[i], (int) planeY[i], textureNames.length - 9, 2);
-            }
-            // تحريك البرشوت
+        
             for (int i = 0; i < parachuteCount; i++) {
 
-                parachuteY[i] -= (constantSpeed - 1.5); // استخدام السرعة الثابتة
+                parachuteY[i] -= (constantSpeed - 1.5); 
                 if (parachuteY[i] <= 0) {
                     parachuteX[i] = (int) (Math.random() * maxWidth);
                     parachuteY[i] = maxHeight;
-//                    health--; // تقليل الصحة عند وصول البرشوت للأرض
+//                    health--; 
                     if (health <= 0) {
                         return;
                     }
                 }
                 DrawSprite2(gl, (int) parachuteX[i], (int) parachuteY[i], 12, 2);
             }
-            // رسم باقي العناصر والطلقات
+          
             for (int i = 0; i < bullets.size(); i++) {
                 Bullet bullet = bullets.get(i);
                 bullet.y += ninjaStarSpeed;
                 DrawSprite2(gl, bullet.x, bullet.y, 11, 0.5f);
 
-                // التحقق من الاصطدام بالجنود player 1
+              
                 for (int j = 0; j < parachuteCount; j++) {
                     double dist = sqrdDistance(bullet.x, bullet.y, (int) parachuteX[j], (int) parachuteY[j]);
                     if (dist <= 50) {
@@ -97,7 +96,7 @@ public abstract class AnimListener implements GLEventListener, KeyListener {
                         break;
                     }
                 }
-                // التحقق من الاصطدام بالطائرات
+               
                 for (int j = 0; j < planeCount; j++) {
                     double dist = sqrdDistance(bullet.x, bullet.y, (int) planeX[j], (int) planeY[j]);
                     if (dist <= 50) {
@@ -107,7 +106,7 @@ public abstract class AnimListener implements GLEventListener, KeyListener {
                         soundPlayer.playSoundForDuration("explosion-42132.mp3",1);
                         planeX[j] = maxWidth;
                         planeY[j] = (int) (Math.random() * (maxHeight) + (maxHeight / 2));
-                        planeSpeed[j] = (float) (Math.random() * 2 + 0.5); // تقليل سرعة الطائرة
+                        planeSpeed[j] = (float) (Math.random() * 2 + 0.5); 
                         if (bullet.tankId == 1) {
                             score += 20;
                         } else if (bullet.tankId == 2) {
